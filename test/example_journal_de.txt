@@ -1,0 +1,7 @@
+02.01.2020 * Example Payee
+    ; Description: Example Transaction
+    ; Foo: Bar
+    Expenses:Unknown                     EUR 1234,56
+    ; Description: Example Posting
+    ; Foo: Bar
+    Assets:Checking

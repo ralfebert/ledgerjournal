@@ -1,0 +1,9 @@
+---
+language: ruby
+cache: bundler
+rvm:
+  - 2.6
+  - 2.7
+before_install:
+  - gem install bundler -v 2.1.4
+  - sudo apt-get -y install ledger

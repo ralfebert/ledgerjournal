@@ -1,0 +1,7 @@
+2010/12/01 * Checking balance
+    Assets:Checking                        $ 1000.00
+    Equity:Opening Balances
+
+2010/12/20 ! Organic Co-op
+    Expenses:Food:Groceries                  $ 37.50
+    Assets:Checking                         $ -37.50 = $ 962.50
