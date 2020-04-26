@@ -1,0 +1,11 @@
+2010/12/01 * Example
+    Expenses:Example1                          $ -10
+    Expenses:Example2                          $ -20
+    Expenses:Example3                          $ -30
+    Assets:Checking                             $ 60
+
+2010/12/02 * Bar
+    Expenses:Bar1                              $ -10
+    Expenses:Bar2                              $ -20
+    Expenses:Bar3                              $ -30
+    Assets:Checking                             $ 60

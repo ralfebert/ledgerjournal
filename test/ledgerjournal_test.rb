@@ -11,6 +11,10 @@ class LedgerTest < Minitest::Test
     File.join(File.dirname(__FILE__), name)
   end
 
+  def example_ledger(name)
+    Ledger::Journal.new(path: fixture_path(name))
+  end
+
   def example_journal_en
     journal = Ledger::Journal.new
 
@@ -59,7 +63,7 @@ class LedgerTest < Minitest::Test
   end
 
   def test_parse_journal_en
-    parsed_journal = Ledger::Journal.new(path: fixture_path('example_journal_en.txt'))
+    parsed_journal = example_ledger('example_journal_en.txt')
     parsed_journal.transactions.each do |tx|
       puts tx.date, tx.payee
     end
@@ -73,19 +77,27 @@ class LedgerTest < Minitest::Test
 
   def test_parse_journal_de
     Ledger.defaults = Ledger::Options.for_locale(:de)
-    parsed_journal = Ledger::Journal.new(path: fixture_path('example_journal_de.txt'))
+    parsed_journal = example_ledger('example_journal_de.txt')
     assert_equal example_journal_de, parsed_journal
   end
 
   def test_transactions_with_account
-    journal = example_journal_en
-    assert_equal [journal.transactions[0]], journal.transactions_with_account('Equity:Opening Balances')
+    journal = example_ledger('example_many_postings.txt')
+    assert_equal ['Example'], journal.transactions_with_account('Expenses:Example1').map(&:payee)
+    assert_equal ['Example'], journal.transactions_with_account(['Expenses:Example1', 'Expenses:Example2']).map(&:payee)
+    assert_equal %w[Example Bar], journal.transactions_with_account(['Expenses:Example1', 'Expenses:Bar2']).map(&:payee)
+    assert_equal %w[Example Bar], journal.transactions_with_account(Set['Expenses:Example1', 'Expenses:Bar2']).map(&:payee)
+    assert_equal [], journal.transactions_with_account(['DoesntExist']).map(&:payee)
   end
 
   def test_posting_for_account
-    journal = example_journal_en
+    journal = example_ledger('example_many_postings.txt')
     tx = journal.transactions[0]
-    assert_equal tx.postings[0], tx.posting_for_account('Assets:Checking')
+    assert_equal tx.postings[1], tx.posting_for_account('Expenses:Example2')
+    assert_equal tx.postings[1], tx.posting_for_account(['Expenses:Example2', 'Expenses:Example3'])
+    assert_equal tx.postings[1], tx.posting_for_account(Set['Expenses:Example2', 'Expenses:Example3'])
+    assert_equal tx.postings[2], tx.posting_for_account(['Expenses:Example3', 'Expenses:Example2'])
+    assert_nil tx.posting_for_account('DoesntExist')
   end
 
   def test_journal_with_ledger_args

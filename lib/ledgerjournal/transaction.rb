@@ -45,10 +45,16 @@ module Ledger
       return lines.join("\n") + "\n"
     end
 
-    # @param [String] account
-    # @return [Ledger::Posting]
-    def posting_for_account(account)
-      postings.select { |posting| posting.account == account }.first
+    # @param [String, Array<String>] accounts name(s)
+    # @return [Ledger::Posting] Returns the first posting that matches one of the given account names
+    def posting_for_account(accounts)
+      accounts = [accounts] unless accounts.is_a?(Enumerable)
+      accounts.each do |account|
+        postings.each do |posting|
+          return posting if account == posting.account
+        end
+      end
+      return nil
     end
 
     protected

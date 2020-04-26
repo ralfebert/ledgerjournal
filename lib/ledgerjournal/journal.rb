@@ -3,6 +3,7 @@
 require 'shellwords'
 require 'nokogiri'
 require 'open4'
+require 'set'
 
 module Ledger
   # Represents a ledger journal
@@ -56,10 +57,11 @@ module Ledger
       File.write(@path, to_s)
     end
 
-    # returns all transactions that have a posting for the given account
-    # @param [String] account account name
+    # returns all transactions that have a posting for one of the given accounts
+    # @param [String, Array<String>, Set<String>] account account name(s)
     def transactions_with_account(account)
-      @transactions.select { |tx| tx.postings.map(&:account).include?(account) }
+      accounts = account.is_a?(Enumerable) ? Set.new(account) : Set[account]
+      @transactions.select { |tx| accounts.intersect?(Set.new(tx.postings.map(&:account))) }
     end
 
     private
