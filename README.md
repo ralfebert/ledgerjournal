@@ -25,7 +25,6 @@ journal = Ledger::Journal.new(path: "example_journal_en.txt")
 
 journal.transactions << Ledger::Transaction.new(
   date: Date.new(2020, 1, 2),
-  state: :cleared,
   payee: 'Example Payee',
   metadata: { "Foo" => "Bar", "Description" => "Example Transaction" },
   postings: [
@@ -37,6 +36,19 @@ journal.transactions << Ledger::Transaction.new(
 puts(journal.to_s)
 ```
 
+### Locale-specific settings
+
+By default ledgerjournal expectes the ledger default date format '%Y/%m/%d' and amounts with decimal point (1234.56). This is configurable:
+
+```ruby
+Ledger.defaults = Options.new(date_format: '%d.%m.%Y', decimal_comma: true)
+```
+
+or:
+
+```ruby
+Ledger.defaults = Ledger::Options.for_locale(:de)
+```
 
 ## Installation
 
