@@ -1,13 +1,13 @@
+# frozen_string_literal: true
+
 require 'shellwords'
 require 'nokogiri'
 require 'open4'
 
 module Ledger
-
   # Represents a ledger journal
   # @see https://www.ledger-cli.org/3.0/doc/ledger3.html#Journal-Format
   class Journal
-
     # @return [Array<Ledger::Transaction>] list of transactions in journal
     attr_accessor :transactions
     # @return [String] path path to ledger file
@@ -20,8 +20,9 @@ module Ledger
       @transactions = []
       if path
         @path = path
-        raise Error.new("#{@path} not found") unless File.exist?(@path)
-        args = ["-f #{@path.shellescape}", ledger_args].compact.join(" ")
+        raise Error, "#{@path} not found" unless File.exist?(@path)
+
+        args = ["-f #{@path.shellescape}", ledger_args].compact.join(' ')
         read_ledger(ledger_args: args)
       end
     end
@@ -29,20 +30,20 @@ module Ledger
     # @param [Ledger::Journal] other
     # @return [Boolean] true if the other journal contains equal transactions
     def ==(other)
-      self.transactions == other.transactions
+      transactions == other.transactions
     end
 
     # @return [String] returns the transactions in the journal formatted as string
     # @param [Boolean] pretty_print calls ledger to format the journal if true
     def to_s(pretty_print: true)
-      str = self.transactions.map(&:to_s).join("\n\n")
+      str = transactions.map(&:to_s).join("\n\n")
       if pretty_print
         begin
-          str = Ledger.defaults.run("-f - print", stdin: str)
-          str = str.lines.map { |line| line.rstrip }.join("\n") + "\n"
-        rescue => error
+          str = Ledger.defaults.run('-f - print', stdin: str)
+          str = str.lines.map(&:rstrip).join("\n") + "\n"
+        rescue StandardError => e
           # return an unformatted string if an error occurs
-          puts "Couldn't format transaction log: #{error}"
+          puts "Couldn't format transaction log: #{e}"
         end
       end
       return str
@@ -50,23 +51,23 @@ module Ledger
 
     # If the journal was opened from a file, save/overwrite the file with the transactions from this journal.
     def save!
-      raise Error.new("Journal was not read from path, cannot save") unless @path
-      File.write(@path, self.to_s)
+      raise Error, 'Journal was not read from path, cannot save' unless @path
+
+      File.write(@path, to_s)
     end
 
     # returns all transactions that have a posting for the given account
     # @param [String] account account name
     def transactions_with_account(account)
-      @transactions.select {|tx| tx.postings.map(&:account).include?(account) }
+      @transactions.select { |tx| tx.postings.map(&:account).include?(account) }
     end
 
     private
-    def read_ledger(ledger_args: "")
-      xml_result = Ledger.defaults.run(ledger_args + " xml")
+
+    def read_ledger(ledger_args: '')
+      xml_result = Ledger.defaults.run(ledger_args + ' xml')
       xml = Nokogiri::XML(xml_result)
-      @transactions = xml.css("transaction").map { |tx_xml| Transaction.parse_xml(tx_xml) }
+      @transactions = xml.css('transaction').map { |tx_xml| Transaction.parse_xml(tx_xml) }
     end
-
   end
-
 end
