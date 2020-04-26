@@ -66,6 +66,38 @@ class LedgerTest < Minitest::Test
     assert_equal File.read(fixture_path('example_journal_en_unformatted.txt')), example_journal_en.to_s(pretty_print: false)
   end
 
+  def test_create_journal_invalid
+    journal = Ledger::Journal.new
+
+    journal.transactions << Ledger::Transaction.new(
+      date: Date.new(2020, 1, 2),
+      payee: 'Example Payee',
+      postings: [
+        Ledger::Posting.new(account: 'Expenses:Unknown', currency: 'EUR', amount: BigDecimal(10)),
+        Ledger::Posting.new(account: 'Assets:Checking', currency: 'EUR', amount: BigDecimal(-11))
+      ]
+    )
+
+    assert_equal File.read(fixture_path('example_journal_en_invalid.txt')), journal.to_s
+  end
+
+  def test_append
+    Tempfile.create('ledger') do |tmpfile|
+      FileUtils.cp(fixture_path('example_journal_en.txt'), tmpfile.path)
+      journal = Ledger::Journal.new(path: tmpfile.path)
+      journal.transactions << Ledger::Transaction.new(
+        date: Date.new(2020, 1, 2),
+        payee: 'Another Payee',
+        postings: [
+          Ledger::Posting.new(account: 'Expenses:Unknown', currency: 'EUR', amount: BigDecimal(10)),
+          Ledger::Posting.new(account: 'Assets:Checking', currency: 'EUR', amount: BigDecimal(-10))
+        ]
+      )
+      journal.save!
+      assert_equal(File.read(fixture_path('example_journal_en_appended.txt')), File.read(tmpfile))
+    end
+  end
+
   def test_parse_journal_en
     parsed_journal = example_journal('example_journal_en.txt')
     parsed_journal.transactions.each do |tx|
@@ -131,5 +163,13 @@ class LedgerTest < Minitest::Test
     assert_equal '1234,56', options.format(BigDecimal('1234.56'))
     assert_equal '04.03.2020', options.format(Date.new(2020, 3, 4))
     assert_equal BigDecimal('1234.56'), options.parse_amount('1234,56')
+  end
+
+  def test_posting_equals
+    p1 = Ledger::Posting.new(account: 'Assets:Checking', currency: 'EUR', amount: BigDecimal('-1234.56'))
+    p2 = Ledger::Posting.new(account: 'Assets:Checking', currency: 'EUR', amount: BigDecimal('-1234.56'))
+    p3 = Ledger::Posting.new(account: 'Assets:Checking', currency: 'EUR', amount: BigDecimal('-1234.57'))
+    assert_equal p1, p2
+    assert !p1.equal?(p3)
   end
 end

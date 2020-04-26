@@ -31,4 +31,5 @@ The ledger binary needs to be installed to parse and pretty-print.'
 
   spec.add_dependency 'nokogiri', '~> 1.10'
   spec.add_dependency 'open4', '~> 1.3'
+  spec.add_development_dependency 'simplecov'
 end

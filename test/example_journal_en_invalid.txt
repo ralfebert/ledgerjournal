@@ -1,0 +1,3 @@
+2020/01/02 * Example Payee
+    Expenses:Unknown                       EUR 10.00
+    Assets:Checking                       EUR -11.00
