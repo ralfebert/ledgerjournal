@@ -4,6 +4,9 @@ Layout/LineLength:
 Metrics/MethodLength:
   Max: 30
 
+Metrics/ClassLength:
+  Max: 300
+  
 Style/RedundantReturn:
   Enabled: false
 

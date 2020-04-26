@@ -19,7 +19,7 @@ The ledger binary needs to be installed to parse and pretty-print.'
   spec.metadata = {
     'source_code_uri' => 'https://github.com/ralfebert/ledgerjournal.git',
     'bug_tracker_uri' => 'https://github.com/ralfebert/ledgerjournal/issues',
-    'documentation_uri' => "https://www.rubydoc.info/gems/ledgerjournal/"
+    'documentation_uri' => 'https://www.rubydoc.info/gems/ledgerjournal/'
   }
 
   # Specify which files should be added to the gem when it is released.

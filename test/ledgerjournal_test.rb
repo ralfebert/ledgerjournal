@@ -103,4 +103,29 @@ class LedgerTest < Minitest::Test
   def test_journal_with_ledger_args
     assert_equal ['Organic Co-op'], Ledger::Journal.new(path: fixture_path('example_journal_en.txt'), ledger_args: '-p 2010/12/20').transactions.map(&:payee)
   end
+
+  def test_run_ledger_output
+    assert_match(/accounting/i, Ledger.defaults.run('--version'))
+  end
+
+  def test_run_ledger_error
+    error = assert_raises Ledger::Error do
+      Ledger.defaults.run('--doesntexist')
+    end
+    assert_match(/illegal option/i, error.message)
+  end
+
+  def test_format_values_en
+    options = Ledger::Options.for_locale(:en)
+    assert_equal '1234.56', options.format(BigDecimal('1234.56'))
+    assert_equal '2020/03/04', options.format(Date.new(2020, 3, 4))
+    assert_equal BigDecimal('1234.56'), options.parse_amount('1234.56')
+  end
+
+  def test_format_values_de
+    options = Ledger::Options.for_locale(:de)
+    assert_equal '1234,56', options.format(BigDecimal('1234.56'))
+    assert_equal '04.03.2020', options.format(Date.new(2020, 3, 4))
+    assert_equal BigDecimal('1234.56'), options.parse_amount('1234,56')
+  end
 end
