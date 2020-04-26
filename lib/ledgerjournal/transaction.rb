@@ -38,11 +38,11 @@ module Ledger
       states = { pending: '!', cleared: '*' }
       lines = ["#{date_str} #{states[state]} #{payee}"]
 
-      lines += metadata.to_a.collect { |m| "  ; #{m[0]}: #{m[1]}" } unless metadata.empty?
+      lines += metadata.to_a.collect { |m| "    ; #{m[0]}: #{m[1]}" } unless metadata.empty?
 
-      lines += postings.map { |posting| posting.to_s.lines.map { |line| '  ' + line }.join }
+      lines += postings.map { |posting| posting.to_s.lines.map { |line| '    ' + line }.join }
 
-      return lines.join("\n") + "\n"
+      return lines.join("\n")
     end
 
     # @param [String, Array<String>] accounts name(s)

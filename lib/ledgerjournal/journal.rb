@@ -37,6 +37,8 @@ module Ledger
     # @param [Boolean] pretty_print calls ledger to format the journal if true
     def to_s(pretty_print: true)
       str = transactions.map(&:to_s).join("\n\n")
+      # add a newline at the end of the file - see https://github.com/ledger/ledger/issues/516
+      str += "\n"
       if pretty_print
         begin
           str = Ledger.defaults.run('-f - print', stdin: str)

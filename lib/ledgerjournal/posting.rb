@@ -43,7 +43,8 @@ module Ledger
     end
 
     def to_s
-      posting_line = "#{account}      #{currency} #{Ledger.defaults.format(amount)}"
+      posting_line = "#{account}   "
+      posting_line += "#{currency} #{Ledger.defaults.format(amount)}".rjust(48 - posting_line.length, ' ')
       posting_line += " = #{currency} #{Ledger.defaults.format(balance_assignment)}" if balance_assignment
       lines = [posting_line]
       lines += metadata.to_a.collect { |m| "; #{m[0]}: #{m[1]}" } unless metadata.empty?

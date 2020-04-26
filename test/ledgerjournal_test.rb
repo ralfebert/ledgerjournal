@@ -62,6 +62,10 @@ class LedgerTest < Minitest::Test
     assert_equal File.read(fixture_path('example_journal_en.txt')), example_journal_en.to_s
   end
 
+  def test_create_journal_en_without_prettyprint
+    assert_equal File.read(fixture_path('example_journal_en_unformatted.txt')), example_journal_en.to_s(pretty_print: false)
+  end
+
   def test_parse_journal_en
     parsed_journal = example_journal('example_journal_en.txt')
     parsed_journal.transactions.each do |tx|
