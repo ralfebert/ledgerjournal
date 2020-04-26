@@ -23,8 +23,7 @@ module Ledger
         @path = path
         raise Error, "#{@path} not found" unless File.exist?(@path)
 
-        args = ["-f #{@path.shellescape}", ledger_args].compact.join(' ')
-        read_ledger(ledger_args: args)
+        read_ledger(ledger_args: ["-f #{@path.shellescape}", ledger_args].compact.join(' '))
       end
     end
 
@@ -69,7 +68,7 @@ module Ledger
     def read_ledger(ledger_args: '')
       xml_result = Ledger.defaults.run(ledger_args + ' xml')
       xml = Nokogiri::XML(xml_result)
-      @transactions = xml.css('transaction').map { |tx_xml| Transaction.parse_xml(tx_xml) }
+      @transactions = xml.xpath('ledger/transactions/transaction').map { |tx_xml| Transaction.parse_xml(tx_xml) }
     end
   end
 end
