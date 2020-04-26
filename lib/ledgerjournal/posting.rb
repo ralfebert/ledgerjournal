@@ -46,7 +46,7 @@ module Ledger
       posting_line = "#{account}      #{currency} #{Ledger.defaults.format(amount)}"
       posting_line += " = #{currency} #{Ledger.defaults.format(balance_assignment)}" if balance_assignment
       lines = [posting_line]
-      lines += metadata.to_a.sort { |a, b| a[0].casecmp(b[0]) }.collect { |m| "; #{m[0]}: #{m[1]}" } unless metadata.empty?
+      lines += metadata.to_a.collect { |m| "; #{m[0]}: #{m[1]}" } unless metadata.empty?
       return lines.join("\n")
     end
 
