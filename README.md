@@ -12,7 +12,7 @@ The ledger binary needs to be installed to parse and pretty-print.
 Parsing a leger file: 
 
 ```ruby
-journal = Ledger::Journal.new(path: "example_journal_en.txt")
+journal = Ledger::Journal.new(path: "example_journal.txt")
 journal.transactions.each do |tx|
   puts tx.date, tx.payee
 end
@@ -21,7 +21,7 @@ end
 Creating a ledger:
 
 ```ruby
-journal = Ledger::Journal.new(path: "example_journal_en.txt")
+journal = Ledger::Journal.new()
 
 journal.transactions << Ledger::Transaction.new(
   date: Date.new(2020, 1, 2),
