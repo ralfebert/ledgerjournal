@@ -2,6 +2,7 @@
 
 [![Gem Version](https://badge.fury.io/rb/ledgerjournal.svg)](https://badge.fury.io/rb/ledgerjournal)
 [![Build Status](https://travis-ci.org/ralfebert/ledgerjournal.svg?branch=master)](https://travis-ci.org/github/ralfebert/ledgerjournal)
+[![Yard Docs](http://img.shields.io/badge/yard-docs-blue.svg)](https://www.rubydoc.info/gems/ledgerjournal/)
 
 ledgerjournal is a Ruby gem to read and write [ledger](https://www.ledger-cli.org/) accounting files.
 For parsing, it uses the [ledger xml command](https://www.ledger-cli.org/3.0/doc/ledger3.html#The-xml-command). For outputting, it formats the ledger data as String in Ruby.
