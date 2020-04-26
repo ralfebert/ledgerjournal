@@ -10,16 +10,16 @@ The ledger binary needs to be installed to parse and pretty-print.
 
 ## Usage
 
-Parsing a leger file: 
+Parsing a ledger journal file: 
 
 ```ruby
-journal = Ledger::Journal.new(path: "example_journal.txt")
+journal = Ledger::Journal.new(path: "example_journal.dat")
 journal.transactions.each do |tx|
   puts tx.date, tx.payee
 end
 ```
 
-Creating a ledger:
+Creating a ledger file from scratch:
 
 ```ruby
 journal = Ledger::Journal.new()
@@ -35,6 +35,27 @@ journal.transactions << Ledger::Transaction.new(
 )
 
 puts(journal.to_s)
+```
+
+Appending to a ledger journal: 
+
+```ruby
+journal = Ledger::Journal.new(path: "example_journal.dat")
+journal.transactions << Ledger::Transaction.new(
+  date: Date.new(2020, 1, 2),
+  payee: 'Example Payee',
+  postings: [
+    Ledger::Posting.new(account: "Expenses:Unknown", currency: "EUR", amount: BigDecimal('1234.56')),
+    Ledger::Posting.new(account: "Assets:Checking", currency: "EUR", amount: BigDecimal('-1234.56'))
+  ]
+)
+journal.save!
+```
+
+Running ledger commands:
+
+```ruby
+puts Ledger.defaults.run('--version')
 ```
 
 ### Locale-specific settings
