@@ -60,7 +60,7 @@ puts Ledger.defaults.run('--version')
 
 ### Locale-specific settings
 
-By default ledgerjournal expectes the ledger default date format '%Y/%m/%d' and amounts with decimal point (1234.56). This is configurable:
+By default ledgerjournal expects the date format '%Y/%m/%d' and amounts with decimal point (1234.56). This is configurable:
 
 ```ruby
 Ledger.defaults = Options.new(date_format: '%d.%m.%Y', decimal_comma: true)
