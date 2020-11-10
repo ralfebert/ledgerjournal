@@ -3,6 +3,9 @@
 module Ledger
   # Options for interaction with ledger-cli
   class Options
+    attr_reader :date_format
+    attr_reader :decimal_comma
+
     # @param [String] date_format like '%Y/%m/%d' to pass to ledger-cli
     # @param [Boolean] decimal_comma pass true to use a comma as decimal separator, otherwise a dot is used
     def initialize(date_format:, decimal_comma:)

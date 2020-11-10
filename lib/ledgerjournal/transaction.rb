@@ -21,7 +21,7 @@ module Ledger
 
     def self.parse_xml(xml)
       Transaction.new(
-        date: Date.strptime(xml.xpath('date').text, '%Y/%m/%d'),
+        date: Date.strptime(xml.xpath('date').text, Ledger.defaults.date_format),
         payee: xml.xpath('payee').text,
         state: xml['state'].to_sym,
         metadata: Hash[xml.xpath('metadata/value').collect { |m| [m['key'], m.xpath('string').text] }],
